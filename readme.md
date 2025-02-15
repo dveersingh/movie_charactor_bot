@@ -17,8 +17,6 @@ A scalable backend chatbot that lets users interact with movie characters using 
 - [Redis Setup](#redis-setup)
 - [ChromaDB Setup](#chromadb-setup)
 - [Load Testing with Locust](#load-testing-with-locust)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Features
@@ -164,3 +162,7 @@ Create .env file:
 #### Web UI mode (http://localhost:8089)
 
         locust -f locustfile.py
+
+### License
+
+        MIT License - See LICENSE for details
