@@ -8,5 +8,5 @@ class User(HttpUser):
     def chat(self):
         self.client.post("/chat", json={
             "character": "Tony Stark",
-            "user_message": self.fake.sentence()
+            "user_message": "what is arc reactor"
         })
