@@ -10,4 +10,6 @@ DB_CONFIG = {
     "host": os.getenv("DB_HOST"),
     "port": os.getenv("DB_PORT")
 }
+
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
+EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"  # Lightweight model
