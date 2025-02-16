@@ -89,6 +89,16 @@ Create .env file:
 
         locust -f locustfile.py
 
+# 4. Test endpoint
+
+        curl -X POST http://localhost:8000/chat \
+        -H "Content-Type: application/json" \
+        -d '{"character":"Tony Stark","user_message":"How to build armor?"}'
+
+# 5. View metrics
+
+        curl http://localhost:8000/metrics
+
 ## File Structure
 
         moviebot/
