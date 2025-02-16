@@ -8,8 +8,5 @@ redis>=5.0.0
 sentence-transformers>=2.7.0
 chromadb>=0.4.24
 slowapi>=0.1.8
-python-multipart>=0.0.9
-torch>=2.0.0
-grpcio>=1.62.0
-grpcio-tools>=1.62.0
-absl-py>=2.1.0
+websockets>=10.0
+prometheus-fastapi-instrumentator
