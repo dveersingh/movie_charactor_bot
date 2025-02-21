@@ -1,32 +1,35 @@
-from sentence_transformers import SentenceTransformer
 import chromadb
 from database import AsyncSessionLocal, Dialogue
 from sqlalchemy import select
-import asyncio
+import requests
+from tenacity import retry, wait_exponential, stop_after_attempt
+from config import HF_API_TOKEN, HF_URL
 
-# Initialize model and client at top level
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+class HuggingFaceEmbedder:
+    def __init__(self):
+    
+        self.api_token = HF_API_TOKEN
+        self.api_url = HF_URL
+        self.headers = {"Authorization": f"Bearer {self.api_token}"}
+
+    @retry(wait=wait_exponential(multiplier=1, min=2, max=10), stop=stop_after_attempt(3))
+    def __call__(self, input: list[str]) -> list[list[float]]:
+        if isinstance(input, str):  # Ensure input is a list
+            input = [input]
+
+        response = requests.post(
+            self.api_url,
+            headers=self.headers,
+            json={"inputs": input, "options": {"wait_for_model": True}},
+            timeout=10
+        )
+        response.raise_for_status()
+        return response.json()[0]  # Return list of embeddings directly
+
+# Initialize ChromaDB with Hugging Face embeddings
+embedder = HuggingFaceEmbedder()
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
-collection = chroma_client.get_or_create_collection(name="dialogues")
-
-async def create_vector_db():
-    async with AsyncSessionLocal() as session:
-        result = await session.execute(select(Dialogue))
-        dialogues = result.scalars().all()
-        
-        batch_size = 500
-        for i in range(0, len(dialogues), batch_size):
-            batch = dialogues[i:i+batch_size]
-            
-            ids = [str(d.id) for d in batch]
-            texts = [d.dialogue for d in batch]
-            embeddings = model.encode(texts)
-            
-            collection.add(
-                ids=ids,
-                embeddings=embeddings.tolist(),
-                documents=texts
-            )
-
-if __name__ == "__main__":
-    asyncio.run(create_vector_db())
+collection = chroma_client.get_or_create_collection(
+    name="dialogues",
+    embedding_function=embedder  
+)

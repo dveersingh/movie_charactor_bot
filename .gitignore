@@ -4,3 +4,9 @@ __pycache__/
 
 # Environment files
 .env
+# Ssl
+*.pem
+# git
+.gitignore
+#ignore
+ca.pem

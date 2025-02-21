@@ -5,16 +5,11 @@ import os
 load_dotenv()
 
 # Handle special characters in password
-db_password = quote_plus(os.getenv("DB_PASSWORD"))
+#db_password = quote_plus(os.getenv("DB_PASSWORD"))
 
-DB_CONFIG = {
-    "dbname": os.getenv("DB_NAME"),
-    "user": os.getenv("DB_USER"),
-    "password": db_password,
-    "host": os.getenv("DB_HOST"),
-    "port": os.getenv("DB_PORT")
-}
-
+DB_URL= os.getenv(f"PG_URL")
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
-REDIS_URL = "redis://localhost:6379"
+REDIS_URL = os.getenv("REDIS_URL")
+HF_API_TOKEN = os.getenv("HF_API_TOKEN")
+HF_URL = os.getenv("HF_URL")
