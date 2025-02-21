@@ -2,6 +2,41 @@
 
 A scalable backend chatbot that lets users interact with movie characters using RAG, PostgreSQL, ChromaDB, and Gemini AI.
 
+## Hosted on AWS - [Swagger API](http://ec2-13-201-77-221.ap-south-1.compute.amazonaws.com/docs)
+
+## Youtube Demostration playlist - [Click](https://www.youtube.com/playlist?list=PL8w5wteGVSuuT7_QHQrKMer2i7GKP-KBi)
+
+### System Structure
+
+        ┌─────────────┐      RestAPI/ WebSocket (wss://)       ┌──────────────┐
+        │             ├───────────────────────────────►│   AWS ALB    │
+        │   Client    │                                │ (Load Balancer)
+        │             ◄───────────────────────────────┤              │
+        └─────────────┘                                └──────┬───────┘
+                                                        │
+                                                        │
+                                                ┌────────────▼────────────┐
+                                                │                         │
+                                                │   EC2 Instances         │
+                                                │  (FastAPI + WebSocket)  │
+                                                │  Auto-Scaling Group     │
+                                                └───────┬─────────────────┘
+                                                        │
+                        ┌──────────────────────────────┼──────────────────────────────┐
+                        │                              │                              │
+                ┌─────────▼──────────┐         ┌─────────▼──────────┐         ┌─────────▼──────────┐
+                │   Aiven PostgreSQL │         │    Aiven Redis     │         │   Gemini AI API    │
+                │  (Chat History)    │         │ (Caching & Queue)  │         │                    │
+                └────────────────────┘         └────────────────────┘         └────────────────────┘
+                        ▲                              ▲                              ▲
+                        │                              │                              │
+                        └──────────────┬───────────────┴──────────────┬───────────────┘
+                                        │                              │
+                                ┌──────▼──────┐             ┌─────────▼─────────┐
+                                │ Prometheus  │             │      Grafana      │
+                                │ (Metrics)   ◄─────────────┤ (Dashboards)      │
+                                └─────────────┘             └───────────────────┘
+
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/Framework-FastAPI-green)](https://fastapi.tiangolo.com)
 
@@ -32,7 +67,7 @@ A scalable backend chatbot that lets users interact with movie characters using 
 
 - Python 3.9+
 - PostgreSQL 14+
-- Redis 7+
+- Redis 5+
 - Google Gemini API Key
 
 ## Installation
@@ -69,7 +104,7 @@ Create .env file:
 
 # Redis
 
-        REDIS_URL=redis://localhost:6379
+        REDIS_URL="<Your redis url>"
 
 # Gemini
 
