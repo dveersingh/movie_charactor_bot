@@ -2,9 +2,6 @@
 
 A scalable backend chatbot that lets users interact with movie characters using RAG, PostgreSQL, ChromaDB, and Gemini AI.
 
-## Hosted on AWS - [Swagger API](http://ec2-13-201-77-221.ap-south-1.compute.amazonaws.com/docs)
-
-## Youtube Demostration playlist - [Click](https://www.youtube.com/playlist?list=PL8w5wteGVSuuT7_QHQrKMer2i7GKP-KBi)
 
 ### System Structure
 
